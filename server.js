@@ -11,6 +11,8 @@ const converter = new showdown.Converter();
 
 const { JSDOM } = require('jsdom');
 
+app.use(express.static('public')); // serves up the css
+
 /**
 * This is loaded syncrounously, as it's only necessary to load once
 */
@@ -20,10 +22,10 @@ const templateFile = fs.readFileSync('./template.html', (err, template) => {
 });
 
 app.get('*', (req, res) => {
-    // TODO sanitise the URL, check if a file exists at that url, otherwise redirect
+    // TODO sanitise the URL
     const contentLocation = content + req.url + file;
 
-    fs.readFile(contentLocation, (err, data) => {
+    fs.readFile(contentLocation, function(err, data) {
         processContent(err, data, res);
     });
 });
@@ -49,10 +51,8 @@ function processContent(err, data, res) {
  */
 function appendContentToTemplate(data) {
     const dom = new JSDOM(templateFile);
-    const content = new JSDOM(converter.makeHtml(data));
-
-    dom.window.document.body.innerHTML = content.serialize();
-    return converter.makeHtml(dom.serialize());
+    dom.window.document.body.innerHTML = converter.makeHtml(data);
+    return dom.serialize();
 }
 
 app.listen(port, () => {

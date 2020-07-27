@@ -28,7 +28,6 @@
   "devDependencies": {
     "jasmine": "^3.6.0",
     "mongoose": "^5.9.25",
-    "nodemon": "^2.0.4",
-    "supertest": "^4.0.2"
+    "nodemon": "^2.0.4"
   }
 }

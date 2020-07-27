@@ -1,5 +1,5 @@
-let server = require('../server');
-const request = require('supertest');
+const server = require('../server');
+const fs = require('fs');
 
 describe('Routing', function() {
 
@@ -13,6 +13,11 @@ describe('Routing', function() {
             return this;
         }
     }
+
+    this.templateFile = fs.readFileSync('./template.html', (err, template) => {
+        if (err) console.error(err);
+        return template.file.toString();
+    });
 
     beforeAll(function() {
         spyOn(mockResponse, 'status').and.callThrough();
@@ -32,10 +37,10 @@ describe('Routing', function() {
         expect(mockResponse.send).toHaveBeenCalled();
     });
 
-    it('should contain the correct content', function() {
-        spyOn(server, 'appendContentToTemplate');
-        server.processContent(undefined, data, mockResponse);
-        expect(server.appendContentToTemplate).toHaveBeenCalled();
+    it('should correctly append content to the template', function() {
+        const combined = server.appendContentToTemplate(data);
+        expect(combined).toBeDefined;
+        expect(combined).toContain(data);
     });
 
 });
