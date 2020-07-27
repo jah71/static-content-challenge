@@ -32,8 +32,7 @@ app.get('*', (req, res) => {
 
 /**
  * Check if the url provided contains a file, if not return 404, other errors
- * are 500 server errors, otherwise we convert the markdown to html and move
- * on to the next piece of middleware
+ * are 500 server errors, otherwise we convert the markdown to html
  */
 function processContent(err, data, res) {
     if (err && err.code === 'ENOENT') {
